@@ -1,0 +1,64 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<meta name="viewport" content="width=1024"> 
+<meta name="viewport" content="initial-scale = 1.0, user-scalable = yes, maximum-scale = 2.0"> 
+<meta name="apple-mobile-web-app-capable" content="yes"> 
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> 
+<meta name="format-detection" content="telephone=no">
+
+<title>ACCP</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() { 
+	testFunc("Hello jimmy");
+	
+	//console.log(" intiated the file ");
+});
+
+
+function testFunc(param){
+	
+	//console.log(param);
+	if(param == undefined){
+		return ; 
+	}else{
+		$("#test").css("margin-left", "0px");
+		$("#test").html(param);
+		$("#test").animate({marginLeft: '350px'}, 3000);
+	}
+	
+	
+}
+</script> 
+
+</head>
+
+<body>
+
+    <h1 class="main_title">Diagnosis</h1>
+    
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 s2_figure">
+        <img src="images/figure.png">
+    </div>
+    
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h2 class="inner_title" id="test">Diagnostic flow-chart for asthma for clinical practice</h2>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+        <p class="paragraph">
+        1. Global Initiative for Asthma. Global strategy for asthma management and prevention. Revised 2014.<br />
+        ICS: inhaled corticosteroid; PEF: peak expiratory flow (highest of 3 readings). When measuring PEF, use the same meter each time as the value may vary by up to 20% between different meters,<br />
+        SABA: short acting beta 2 agonist. Bronchodilator may be lost  during severe exacerbations or viral infections. If bronchodilator reversibility is not present at initial presentation,<br />
+        the next step depends on the availability of tests and the urdency of the need for treatment. 
+        </p>
+    </div>
+
+</body>
+</html>
+ 

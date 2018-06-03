@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    
+    
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        />
+    
+    
+   
+     
+        <LinearLayout 
+            android:id="@+id/span"
+		      android:layout_width="match_parent"
+		      android:layout_height="35dp"
+		      android:orientation="horizontal" 
+		      android:layout_alignParentBottom="true" >
+          </LinearLayout>
+          
+        
+          <LinearLayout 
+         android:id="@+id/plyBar"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:orientation="vertical"
+	      android:background="#80333333"
+		  android:padding="15dp"
+	      android:layout_marginLeft="15dp"
+	      android:layout_marginRight="15dp" 
+	      android:layout_above="@id/span"
+	      >
+         
+         <SeekBar
+             android:id="@+id/seekBar1"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:progressBackgroundTint="#ff0000"
+             android:progressTint="#333333"
+             android:thumbTint="#cccccc" 
+             android:layout_marginBottom="10dp"/>
+         
+          <LinearLayout 
+		      android:layout_width="match_parent"
+		      android:layout_height="wrap_content"
+		      android:orientation="horizontal" >
+		      
+		      
+		       <ImageButton
+			        android:id="@+id/posply"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:background="#00ffffff"
+					android:src="@drawable/ply"
+					
+					 />
+		       
+		        <ImageButton
+			        android:id="@+id/stpply"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:background="#00ffffff"
+					android:src="@drawable/stp"
+					android:layout_marginLeft="10dp"
+					
+					 />
+		        
+		        
+		         
+		        <ImageButton
+			        android:id="@+id/mute"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:background="#00ffffff"
+					android:src="@drawable/sndon"
+					android:layout_marginLeft="20dp"
+					
+					 />
+		       
+		       <TextView
+		           android:id="@+id/display"
+		           android:layout_width="100dp"
+		           android:layout_height="match_parent"
+		           android:layout_marginLeft="20dp"
+		           android:text="01:55:20 / 01:55:20"
+		           android:textColor="#ffffff" 
+		           android:background="#333333"
+		           android:padding="5dp"
+		           android:textSize="10sp"
+		           android:gravity="center"/>
+		
+		       <Space 
+		           android:layout_height="match_parent"
+		           android:layout_width="0dp"
+		           android:layout_weight="0.7"
+		           />
+		     
+		       
+		        
+		       <ImageButton
+			        android:id="@+id/cloBtn"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:background="#00ffffff"
+					android:src="@drawable/clos"
+					
+					 />
+		       
+	           <!--   <Button
+			        android:id="@+id/cloBtn"
+			        android:layout_width="80dp"
+			        android:layout_height="40dp"
+			        android:text="X"
+			        android:textSize="28dp"
+			        android:layout_gravity="right"
+			        android:background="#00ffffff"
+			        android:textColor="#999999"
+			        android:padding="0dp"/> -->
+		      
+		  </LinearLayout>  
+
+     </LinearLayout>
+    
+	 
+    
+   <!--  <MediaController 
+        android:id="@+id/control"
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/video_view"/> -->
+        
+
+</RelativeLayout>
