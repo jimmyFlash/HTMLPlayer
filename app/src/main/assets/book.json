@@ -4,23 +4,23 @@
     "BackgroundImagePath":"",
     "ThumbnailsPath":"images/thumbs/",
     "Content": [
-        {"section":"1","filename":"ACCP_S_001/ACCP_S_001.html", "thumb": "ACCP_S_001.jpg"},
-		{"section":"1","filename":"ACCP_S_002/ACCP_S_002.html", "thumb": "ACCP_S_002.jpg"},
-		{"section":"1","filename":"ACCP_S_003/ACCP_S_003.html", "thumb": "ACCP_S_003.jpg"},
-		{"section":"2","filename":"ACCP_S_004/ACCP_S_004.html", "thumb": "ACCP_S_004.jpg"},
-		{"section":"3","filename":"ACCP_S_005/ACCP_S_005.html", "thumb": "ACCP_S_005.jpg"},
-		{"section":"3","filename":"ACCP_S_006/ACCP_S_006.html", "thumb": "ACCP_S_006.jpg"},
-		{"section":"3","filename":"ACCP_S_007/ACCP_S_007.html", "thumb": "ACCP_S_007.jpg"},
-		{"section":"3","filename":"ACCP_S_008/ACCP_S_008.html", "thumb": "ACCP_S_008.jpg"},
-		{"section":"3","filename":"ACCP_S_009/ACCP_S_009.html", "thumb": "ACCP_S_009.jpg"},
-		{"section":"3","filename":"ACCP_S_010/ACCP_S_010.html", "thumb": "ACCP_S_010.jpg"},
-		{"section":"3","filename":"ACCP_S_011/ACCP_S_011.html", "thumb": "ACCP_S_011.jpg"}
+        {"section":"1","filename":"ACCP_S_001/ACCP_S_001.html", "thumb": "images/thumbs/ACCP_S_001.jpg"},
+		{"section":"1","filename":"ACCP_S_002/ACCP_S_002.html", "thumb": "images/thumbs/ACCP_S_002.jpg"},
+		{"section":"1","filename":"ACCP_S_003/ACCP_S_003.html", "thumb": "images/thumbs/ACCP_S_003.jpg"},
+		{"section":"2","filename":"ACCP_S_004/ACCP_S_004.html", "thumb": "images/thumbs/ACCP_S_004.jpg"},
+		{"section":"3","filename":"ACCP_S_005/ACCP_S_005.html", "thumb": "images/thumbs/ACCP_S_005.jpg"},
+		{"section":"3","filename":"ACCP_S_006/ACCP_S_006.html", "thumb": "images/thumbs/ACCP_S_006.jpg"},
+		{"section":"3","filename":"ACCP_S_007/ACCP_S_007.html", "thumb": "images/thumbs/ACCP_S_007.jpg"},
+		{"section":"3","filename":"ACCP_S_008/ACCP_S_008.html", "thumb": "images/thumbs/ACCP_S_008.jpg"},
+		{"section":"3","filename":"ACCP_S_009/ACCP_S_009.html", "thumb": "images/thumbs/ACCP_S_009.jpg"},
+		{"section":"3","filename":"ACCP_S_010/ACCP_S_010.html", "thumb": "images/thumbs/ACCP_S_010.jpg"},
+		{"section":"3","filename":"ACCP_S_011/ACCP_S_011.html", "thumb": "images/thumbs/ACCP_S_011.jpg"}
 ],
    
     "Sections":[
-		{"sectionid":"1","sectionname":"GINA Guidelines"},
-		{"sectionid":"2","sectionname":"The Turbuhaler"},
-		{"sectionid":"3","sectionname":"Modules summary"}
+		{"sectionid":"1","sectionname":"GINA Guidelines", "thumb": "images/thumbs/ACCP_S_001.jpg"},
+		{"sectionid":"2","sectionname":"The Turbuhaler", "thumb": "images/thumbs/ACCP_S_001.jpg"},
+		{"sectionid":"3","sectionname":"Modules summary", "thumb": "images/thumbs/ACCP_S_001.jpg"}
 	]
     
 }

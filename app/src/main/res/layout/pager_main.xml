@@ -1,63 +1,67 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#cccccc">
 
    <android.support.v4.view.ViewPager 
        android:id="@+id/pager" 
-       android:layout_width="match_parent" 
-       android:layout_height="match_parent" 
+       android:layout_width="0dp"
+       android:layout_height="0dp"
        android:background="#cccccc"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       tools:background="#ffcc00"
+
       />
 
-   <!--<RelativeLayout
-       android:id="@+id/viewPagerIndicator"
-       android:layout_width="match_parent"
-       android:layout_height="55dp"
-       android:layout_alignParentBottom="true"
-       android:layout_marginTop="5dp"
-       android:gravity="center">
+
+      <com.jimmy.htmlplayer.ui.views.activities.PagerComponent
+          android:layout_width="0dp"
+          android:layout_height="55dp"
+          android:id="@+id/viewPagerIndicatorComp"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          tools:background="#ffcccc"
+
+          >
+      </com.jimmy.htmlplayer.ui.views.activities.PagerComponent>
 
 
-      <LinearLayout
-          android:id="@+id/viewPagerCountDots"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_centerHorizontal="true"
-          android:gravity="center"
-          android:orientation="horizontal" />
 
-         <ImageButton
-             android:id="@+id/btn_next"
-             android:layout_width="42dp"
-             android:layout_height="42dp"
-             android:layout_alignParentRight="true"
-             android:layout_marginRight="15dp"
-             android:background="@drawable/btn_round_semitransperant"
-             android:src="@mipmap/ic_navigation_arrow_forward" />
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/header"
+       android:layout_width="0dp"
+       android:layout_height="0dp"
+       android:layout_marginTop="16dp"
+       android:scaleType="centerCrop"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="@+id/sub_set"
+       tools:background="#ccffcc"
+       android:background="@color/colorPrimary"
+       tools:listitem="@layout/recycler_item"
+       />
 
-         <ImageButton
-             android:id="@+id/btn_finish"
-             android:layout_width="42dip"
-             android:layout_height="42dip"
-             android:layout_alignParentRight="true"
-             android:layout_marginRight="15dp"
-             android:background="@drawable/btn_round_semitransperant"
-             android:contentDescription="Let's start"
-             android:src="@mipmap/ic_navigation_check"
-             android:visibility="gone" />
+   <ImageView
+       android:id="@+id/sub_set"
+       android:layout_width="36dp"
+       android:layout_height="36dp"
+       android:layout_marginBottom="16dp"
+       android:layout_marginEnd="8dp"
+       android:background="@drawable/info_background"
+       android:padding="5dp"
+       android:src="@drawable/ic_star"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.85"
 
-   </RelativeLayout>-->
+       />
 
-   <com.jimmy.htmlplayer.ui.views.activities.PagerComponent
-       android:layout_width="match_parent"
-       android:layout_height="55dp"
-       android:id="@+id/viewPagerIndicatorComp"
-       android:layout_alignParentBottom="true"
-
-       >
-
-   </com.jimmy.htmlplayer.ui.views.activities.PagerComponent>
-
-   </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

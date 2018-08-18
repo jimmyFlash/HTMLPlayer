@@ -176,6 +176,7 @@ public class ViewerActivity extends AppCompatActivity {
                                 // get each section unique id
                                 String sectionId = jsO.getString(UIConstants.KEY_SECTION_ID);
                                 String sectionTitle = jsO.getString(UIConstants.KEY_SECTION_NAME);
+                                String sectionThumb = jsO.getString(UIConstants.KEY_SECTION_THUMB);
 
                                 tabLayout.addTab(tabLayout.newTab().setText(sectionTitle), i == (selectedSet -1 ));
 
@@ -208,7 +209,8 @@ public class ViewerActivity extends AppCompatActivity {
                                     htmlObj.setId(jsO2.getString(UIConstants.KEY_SECTION));
                                     htmlObj.setThumb(jsO2.getString(UIConstants.KEY_THUMB));
 
-//                                    Log.d(TAG, " the html pojo created is of properties    " + htmlObj.getHtml()  + "," + htmlObj.getId());
+                                    Log.d(TAG, " the html pojo created is of properties    " + htmlObj.getHtml()
+                                            + "," + htmlObj.getId() + "," + htmlObj.getThumb());
 
                                     // if the current slide object id === that of the base section id
                                     if (htmlObj.getId().equalsIgnoreCase(sectionId)) {
@@ -250,7 +252,7 @@ public class ViewerActivity extends AppCompatActivity {
     }
 
     private void bindWidgetsWithAnEvent() {
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 setCurrentTabFragment(tab.getPosition());
@@ -269,13 +271,5 @@ public class ViewerActivity extends AppCompatActivity {
         selectedSet = tabPosition + 1;
 
         setInitialFragment();
-     /*   switch (tabPosition) {
-            case 0 :
-
-                break;
-            case 1 :
-
-                break;
-        }*/
     }
 }

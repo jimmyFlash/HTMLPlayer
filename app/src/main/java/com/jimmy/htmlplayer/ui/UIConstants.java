@@ -6,6 +6,7 @@ package com.jimmy.htmlplayer.ui;
 public class UIConstants {
 
     public static final String KEY_SECTION_NAME = "sectionname";
+    public static final String KEY_SECTION_THUMB = "thumb";
     public static String copyFoldNm = "pdf";
 
     public static String KEY_SECTIONS = "Sections";
