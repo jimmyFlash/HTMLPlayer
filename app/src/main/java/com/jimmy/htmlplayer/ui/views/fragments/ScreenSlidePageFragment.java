@@ -36,7 +36,7 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 
 	public WebView webView;
 	public ImageView imageView;
-	public int currentPos;
+	public int currentPos ;
 	public String urlLoadedOnTouch;
 	private RelativeLayout rlayout;
 	private ViewGroup container_;
@@ -60,8 +60,9 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		currentPos = (savedInstanceState != null) ?  savedInstanceState.getInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION, 0) : getArguments().getInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION);
+		currentPos = getArguments().getInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION);
 
+        Log.e("savedInstanceState", currentPos + "<----------------------------------");
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		AnimationDrawable gifAnimation = (AnimationDrawable) imageView.getBackground();
 		gifAnimation.start();
 
-		Log.e("what to load","set: " + selectedSet + "/ pos:" + currentPos);
+		Log.e("what to load next","set: " + selectedSet + "/ pos:" + currentPos);
 		 selectedSetMap =  ( (HashMap ) setsList.get(selectedSet));
 		 selectedHTML =  ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(currentPos)).getHtml();
 		//Log.e("what to load","set: " + selectedSet + "/ pos:" + currentPos + "/" +selectedHTML + " vs " + ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml() + " size-all: " + selectedSetMap.size());
@@ -106,8 +107,8 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		// webView.getSettings().setDefaultFontSize(24);
 		webView.setHorizontalScrollBarEnabled(false);
 		webView.setVerticalScrollBarEnabled(false);
-		webView.getSettings().setBuiltInZoomControls(true);
-		webView.getSettings().setSupportZoom(true);
+//		webView.getSettings().setBuiltInZoomControls(true);
+//		webView.getSettings().setSupportZoom(true);
 		webView.setBackgroundColor(0xcccccc);
 		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		webView.setTag(currentPos);
