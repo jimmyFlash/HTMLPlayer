@@ -3,7 +3,6 @@ package com.jimmy.htmlplayer.ui.views.activities;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -70,16 +69,16 @@ public class ViewerActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         // load the json string and parse in AsyncTask
-        new loadJson(UIConstants.jsonFileName).execute();
+        new LoadJson(UIConstants.jsonFileName).execute();
 
 
         if(savedInstanceState != null){
 
-            // TODO: 9/25/2017 defer from loading json all over again to optimise performance // (NO)  "new loadJson(UIConstants.jsonFileName).execute();"
+            // TODO: 9/25/2017 defer from loading json all over again to optimise performance // (NO)  "new LoadJson(UIConstants.jsonFileName).execute();"
         }else{
 
             // load the json string and parse in AsyncTask
-            // new loadJson(UIConstants.jsonFileName).execute();
+            // new LoadJson(UIConstants.jsonFileName).execute();
         }
     }
 
@@ -111,12 +110,12 @@ public class ViewerActivity extends AppCompatActivity {
     }
 
 
-    class loadJson extends AsyncTask <String, String, JSONObject> {
+    class LoadJson extends AsyncTask <String, String, JSONObject> {
 
         private final String fileJsonNm;
         private JSONObject theJson;
 
-        public loadJson(String fileNm) {
+        public LoadJson(String fileNm) {
 
             fileJsonNm = fileNm;
         }

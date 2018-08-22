@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +19,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.jimmy.htmlplayer.R;
+import com.jimmy.htmlplayer.datahandlers.pojo.HTMLObject;
 import com.jimmy.htmlplayer.ui.UIConstants;
 import com.jimmy.htmlplayer.ui.views.activities.PagerComponent;
 import com.jimmy.htmlplayer.ui.views.adapters.MyPageChangeListener;
 import com.jimmy.htmlplayer.ui.views.adapters.ScreenSlidePagerAdapter;
+import com.jimmy.htmlplayer.ui.views.adapters.ThumbsRvAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.jimmy.htmlplayer.ui.UIConfig.chapTitlesArr;
+import static com.jimmy.htmlplayer.ui.UIConfig.selectedSet;
+import static com.jimmy.htmlplayer.ui.UIConfig.setsList;
 
 
 public class PagerFragment extends Fragment implements View.OnClickListener{
@@ -27,8 +39,9 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 	public static ViewPager mViewPager;  // viewpager in layout ref
 	private ScreenSlidePagerAdapter mPagerAdapter; // the adapter ref
 	private MyPageChangeListener mPagerListener; // viewpager swipe listener
+	private RecyclerView rv;
 
-	public static int pagerPos = 0;// holder for pages position
+	private static int pagerPos = 0;// holder for pages position
 	private ImageButton btnNext, btnFinish;
 	private PagerComponent pager_indicator;
 
@@ -37,14 +50,19 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 
 	private Context act;
 
+
+	private ArrayList list;
+
+
 	public static Fragment newInstance() {
+		pagerPos = 0;
 		return new PagerFragment();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.pager_main, container, false);
-
+		act= getActivity();
 		mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
 		// mPager.setPageTransformer(true, new ZoomOutPageTransformer());
 		// mPager.setPageTransformer(true, new DepthPageTransformer());
@@ -53,13 +71,20 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 		btnNext = (ImageButton) rootView.findViewById(R.id.btn_next);
 		btnFinish = (ImageButton) rootView.findViewById(R.id.btn_finish);
 		pager_indicator = (PagerComponent) rootView.findViewById(R.id.viewPagerIndicatorComp);
+		
+		rv = (RecyclerView) rootView.findViewById(R.id.header);
+		rv.addItemDecoration(new DividerItemDecoration(rv.getContext(), DividerItemDecoration.HORIZONTAL));
+		rv.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
 
 
-/*
-		btnNext.setOnClickListener(this);
-		btnFinish.setOnClickListener(this);
-*/
-		act= getActivity();
+		int arrObjLen = ((ArrayList) ((HashMap) setsList.get(selectedSet)).get(chapTitlesArr[selectedSet - 1])).size();
+		Log.e("Length of Obj arr", arrObjLen + "");
+		 list = (ArrayList) ((HashMap) setsList.get(selectedSet)).get(chapTitlesArr[selectedSet - 1]);
+		ThumbsRvAdapter thumbsAdapter = new ThumbsRvAdapter(getActivity(), list, (htmlObject, pos) ->
+				MyPageChangeListener.updateView(pos));
+		rv.setAdapter(thumbsAdapter);
+
+//		Log.e("getCount", ( (ArrayList) ( (HashMap) setsList.get(selectedSet)).get( chapTitlesArr[selectedSet - 1])).size() + "");
 
 
 		// get the page portion to scroll to
@@ -74,21 +99,6 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 		mPagerListener = new MyPageChangeListener(mViewPager, mPagerAdapter, new MyPageChangeListener.EventsDelegate() {
 			@Override
 			public void pageSelected(int position) {
-			/*
-				for (int i = 0; i < dotsCount; i++) {
-					dots[i].setImageDrawable(ContextCompat.getDrawable(act, R.drawable.nonselecteditem_dot));
-				}
-
-				dots[position].setImageDrawable(ContextCompat.getDrawable(act, R.drawable.selecteditem_dot));
-
-				if (position + 1 == dotsCount) {
-					btnNext.setVisibility(View.GONE);
-					btnFinish.setVisibility(View.VISIBLE);
-				} else {
-					btnNext.setVisibility(View.VISIBLE);
-					btnFinish.setVisibility(View.GONE);
-				}*/
-
 				pager_indicator.pageSelected( position);
 
 			}
@@ -105,7 +115,6 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 		});
 		mViewPager.addOnPageChangeListener(mPagerListener);
 
-//		setUiPageViewController();
 
 		pager_indicator.setUiPageViewController(mPagerAdapter, mViewPager);
 
@@ -134,41 +143,5 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 		}*/
 
 	}
-
-/*
-
-	private void setUiPageViewController() {
-
-		dotsCount = mPagerAdapter.getCount();
-		dots = new ImageView[dotsCount];
-
-		for (int i = 0; i < dotsCount; i++) {
-			dots[i] = new ImageView(act);
-
-			dots[i].setImageDrawable(ContextCompat.getDrawable(act, R.drawable.nonselecteditem_dot ));
-
-
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.WRAP_CONTENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT
-			);
-
-			params.setMargins(4, 0, 4, 0);
-
-			pager_indicator.addView(dots[i], params);
-		}
-
-		dots[mViewPager.getCurrentItem()].setImageDrawable(ContextCompat.getDrawable(act, R.drawable.selecteditem_dot));
-
-		if (mViewPager.getCurrentItem() + 1 == dotsCount) {
-			btnNext.setVisibility(View.GONE);
-			btnFinish.setVisibility(View.VISIBLE);
-		} else {
-			btnNext.setVisibility(View.VISIBLE);
-			btnFinish.setVisibility(View.GONE);
-		}
-	}
-*/
-
 
 }
