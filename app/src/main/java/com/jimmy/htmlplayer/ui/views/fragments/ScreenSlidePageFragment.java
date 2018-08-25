@@ -85,11 +85,12 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		gifAnimation.start();
 
 		Log.e("what to load next","set: " + selectedSet + "/ pos:" + currentPos);
+		Log.e("getCount", ( (ArrayList) ( (HashMap) setsList.get(selectedSet)).get( chapTitlesArr[selectedSet - 1])).size() + "");
 		 selectedSetMap =  ( (HashMap ) setsList.get(selectedSet));
 		 selectedHTML =  ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(currentPos)).getHtml();
 		//Log.e("what to load","set: " + selectedSet + "/ pos:" + currentPos + "/" +selectedHTML + " vs " + ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml() + " size-all: " + selectedSetMap.size());
 
-		if (currentPos < selectedSetMap.size()) {
+		if (currentPos < ( (ArrayList) selectedSetMap.get( chapTitlesArr[selectedSet - 1])).size()) {
 			webView.loadUrl(selectedHTML);
 		} else {
 			webView.loadUrl(((HTMLObject) ((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml() );
