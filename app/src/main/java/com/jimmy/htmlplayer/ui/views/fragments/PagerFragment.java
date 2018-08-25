@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.transition.AutoTransition;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -43,6 +47,7 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 
 	private static int pagerPos = 0;// holder for pages position
 	private ImageButton btnNext, btnFinish;
+	private ImageView strImg;
 	private PagerComponent pager_indicator;
 
 //	private int dotsCount;
@@ -52,6 +57,8 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 
 
 	private ArrayList list;
+	private ConstraintLayout constrain1;
+	private boolean changed  = false;
 
 
 	public static Fragment newInstance() {
@@ -67,6 +74,29 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 		// mPager.setPageTransformer(true, new ZoomOutPageTransformer());
 		// mPager.setPageTransformer(true, new DepthPageTransformer());
 		// mPager.setOffscreenPageLimit(0);
+
+		strImg = (ImageView) rootView.findViewById(R.id.sub_set);
+
+		constrain1 = (ConstraintLayout) rootView.findViewById(R.id.constrain_set1);
+
+		ConstraintSet constraintSet1 = new ConstraintSet();
+		constraintSet1.clone(constrain1);
+		ConstraintSet constraintSet2 = new ConstraintSet();
+		constraintSet2.clone(constrain1);
+		constraintSet2.setVerticalBias(R.id.sub_set, (float) 1.0);
+
+		AutoTransition transition = new AutoTransition();
+		transition.setDuration(500);
+
+		//todo enable / add drawable compat lib and chnage icon up/down based on press
+		strImg.setOnClickListener(v -> {
+
+            TransitionManager.beginDelayedTransition(constrain1, transition);
+            ConstraintSet constraint =  (changed)? constraintSet1 : constraintSet2;
+            constraint.applyTo(constrain1);
+
+            changed = !changed;
+        });
 
 		btnNext = (ImageButton) rootView.findViewById(R.id.btn_next);
 		btnFinish = (ImageButton) rootView.findViewById(R.id.btn_finish);
