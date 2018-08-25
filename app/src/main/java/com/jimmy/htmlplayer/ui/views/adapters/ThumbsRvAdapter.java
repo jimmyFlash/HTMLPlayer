@@ -25,10 +25,7 @@ public class ThumbsRvAdapter extends RecyclerView.Adapter<ThumbsRvAdapter.ViewHo
     private List<HTMLObject> lstObj;
     private PostsAdapterListener postsAdapterListener;
     private LayoutInflater layoutInflater;
-
-
-    // TODO: 6/9/2018  use view model LAC, check kotlinmvvm for sample
-    // TODO: 6/9/2018  check animating constraint vertcal bias
+    
 
 
     public interface PostsAdapterListener {
