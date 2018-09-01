@@ -84,8 +84,8 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		AnimationDrawable gifAnimation = (AnimationDrawable) imageView.getBackground();
 		gifAnimation.start();
 
-		Log.e("what to load next","set: " + selectedSet + "/ pos:" + currentPos);
-		Log.e("getCount", ( (ArrayList) ( (HashMap) setsList.get(selectedSet)).get( chapTitlesArr[selectedSet - 1])).size() + "");
+//		Log.e("what to load next","set: " + selectedSet + "/ pos:" + currentPos);
+//		Log.e("getCount", ( (ArrayList) ( (HashMap) setsList.get(selectedSet)).get( chapTitlesArr[selectedSet - 1])).size() + "");
 		 selectedSetMap =  ( (HashMap ) setsList.get(selectedSet));
 		 selectedHTML =  ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(currentPos)).getHtml();
 		//Log.e("what to load","set: " + selectedSet + "/ pos:" + currentPos + "/" +selectedHTML + " vs " + ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml() + " size-all: " + selectedSetMap.size());
@@ -206,8 +206,8 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 //			urlLoadedOnTouch = initialHtml;
 		} else {
 
-			Log.e("nextPos", currentPos + "");
-			Log.e("PagerFragment.pagerPos", PagerFragment.mViewPager.getCurrentItem() + "");
+//			Log.e("nextPos", currentPos + "");
+//			Log.e("PagerFragment.pagerPos", PagerFragment.mViewPager.getCurrentItem() + "");
 			
 			if (currentPos == PagerFragment.mViewPager.getCurrentItem()) {
 				rlayout.setVisibility(View.GONE);
