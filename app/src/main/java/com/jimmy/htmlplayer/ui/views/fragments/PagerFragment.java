@@ -2,10 +2,12 @@ package com.jimmy.htmlplayer.ui.views.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
@@ -38,14 +40,14 @@ import static com.jimmy.htmlplayer.ui.UIConfig.selectedSet;
 import static com.jimmy.htmlplayer.ui.UIConfig.setsList;
 
 
-public class PagerFragment extends Fragment implements View.OnClickListener{
+public class PagerFragment extends Fragment{
 
 	public static ViewPager mViewPager;  // viewpager in layout ref
+	private static PagerFragment frgIns;
 	private ScreenSlidePagerAdapter mPagerAdapter; // the adapter ref
 	private MyPageChangeListener mPagerListener; // viewpager swipe listener
 	private RecyclerView rv;
 
-	private static int pagerPos = 0;// holder for pages position
 	private ImageButton btnNext, btnFinish;
 	private ImageView strImg;
 	private PagerComponent pager_indicator;
@@ -62,8 +64,7 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 
 
 	public static Fragment newInstance() {
-		pagerPos = 0;
-		return new PagerFragment();
+		return frgIns = new PagerFragment();
 	}
 
 	@Override
@@ -88,7 +89,14 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 		AutoTransition transition = new AutoTransition();
 		transition.setDuration(500);
 
-		//todo enable / add drawable compat lib and chnage icon up/down based on press
+		// set VectorDrawable for pre-Lollipop devices
+		Resources resources = getActivity().getResources();
+		Resources.Theme theme = getActivity().getTheme();
+		VectorDrawableCompat downVec = VectorDrawableCompat.create(
+				resources, R.drawable.ic_arrow_drop_down_black_24dp, theme);
+		VectorDrawableCompat upVec = VectorDrawableCompat.create(
+				resources, R.drawable.ic_arrow_drop_up_black_24dp, theme);
+
 		strImg.setOnClickListener(v -> {
 
             TransitionManager.beginDelayedTransition(constrain1, transition);
@@ -96,33 +104,32 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
             constraint.applyTo(constrain1);
 
             changed = !changed;
+
+			strImg.setImageDrawable((changed)? upVec : downVec);
         });
 
 		btnNext = (ImageButton) rootView.findViewById(R.id.btn_next);
 		btnFinish = (ImageButton) rootView.findViewById(R.id.btn_finish);
 		pager_indicator = (PagerComponent) rootView.findViewById(R.id.viewPagerIndicatorComp);
+
 		
 		rv = (RecyclerView) rootView.findViewById(R.id.header);
 		rv.addItemDecoration(new DividerItemDecoration(rv.getContext(), DividerItemDecoration.HORIZONTAL));
 		rv.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
 
-
 		int arrObjLen = ((ArrayList) ((HashMap) setsList.get(selectedSet)).get(chapTitlesArr[selectedSet - 1])).size();
-		Log.e("Length of Obj arr", arrObjLen + "");
-		 list = (ArrayList) ((HashMap) setsList.get(selectedSet)).get(chapTitlesArr[selectedSet - 1]);
+//		Log.e("Length of Obj arr", arrObjLen + "");
+
+		list = (ArrayList) ((HashMap) setsList.get(selectedSet)).get(chapTitlesArr[selectedSet - 1]);
 		ThumbsRvAdapter thumbsAdapter = new ThumbsRvAdapter(getActivity(), list, (htmlObject, pos) ->
 				MyPageChangeListener.updateView(pos));
 		rv.setAdapter(thumbsAdapter);
 
 //		Log.e("getCount", ( (ArrayList) ( (HashMap) setsList.get(selectedSet)).get( chapTitlesArr[selectedSet - 1])).size() + "");
 
-
-		// get the page portion to scroll to
-		if (savedInstanceState != null) pagerPos = savedInstanceState.getInt(UIConstants.KEY_CURRENT_PAGE);
-
 		mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
 		mViewPager.setAdapter(mPagerAdapter);
-		mViewPager.setCurrentItem(pagerPos);
+//		mViewPager.setCurrentItem(pagerPos);
 
 
 
@@ -130,48 +137,18 @@ public class PagerFragment extends Fragment implements View.OnClickListener{
 			@Override
 			public void pageSelected(int position) {
 				pager_indicator.pageSelected( position);
-
 			}
 
 			@Override
-			public void pageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-			}
+			public void pageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
 			@Override
-			public void pageStateChnage(int state) {
-
-			}
+			public void pageStateChnage(int state) {}
 		});
 		mViewPager.addOnPageChangeListener(mPagerListener);
-
-
 		pager_indicator.setUiPageViewController(mPagerAdapter, mViewPager);
 
 		return rootView;
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		Log.d("current page", "val: " + mViewPager.getCurrentItem());
-		outState.putInt(UIConstants.KEY_CURRENT_PAGE, mViewPager.getCurrentItem());
-	}
-
-	@Override
-	public void onClick(View v) {
-
-		/*switch (v.getId()) {
-			case R.id.btn_next:
-				mViewPager.setCurrentItem((mViewPager.getCurrentItem() < dotsCount) ? mViewPager.getCurrentItem() + 1 : 0);
-				break;
-
-			case R.id.btn_finish:
-				// getActivity().finish();
-				break;
-		}*/
-
 	}
 
 }
