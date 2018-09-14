@@ -68,17 +68,12 @@ public class ViewerActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        // load the json string and parse in AsyncTask
-        new LoadJson(UIConstants.jsonFileName).execute();
-
-
         if(savedInstanceState != null){
 
-            // TODO: 9/25/2017 defer from loading json all over again to optimise performance // (NO)  "new LoadJson(UIConstants.jsonFileName).execute();"
         }else{
 
             // load the json string and parse in AsyncTask
-            // new LoadJson(UIConstants.jsonFileName).execute();
+            new LoadJson(UIConstants.jsonFileName).execute();
         }
     }
 
