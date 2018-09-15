@@ -63,17 +63,19 @@ public class ViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
         continaerFrame = (FrameLayout) findViewById(R.id.container);
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        if(savedInstanceState != null){
 
-        }else{
+        if(savedInstanceState == null){
 
             // load the json string and parse in AsyncTask
             new LoadJson(UIConstants.jsonFileName).execute();
+        }else{
+            for (int i = 0 ; i < chapTitlesArr.length ; i++){
+                tabLayout.addTab(tabLayout.newTab().setText(chapTitlesArr[i]), i == (selectedSet -1 ));
+            }
+            bindWidgetsWithAnEvent();
         }
     }
 

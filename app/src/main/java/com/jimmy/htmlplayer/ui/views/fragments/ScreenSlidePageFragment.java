@@ -36,12 +36,13 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 
 	public WebView webView;
 	public ImageView imageView;
-	public int currentPos ;
+	private int currentPos = 0;
 	public String urlLoadedOnTouch;
 	private RelativeLayout rlayout;
 	private ViewGroup container_;
 	private HashMap selectedSetMap;
 	private String selectedHTML;
+	private ArrayList mapTitlesArray;
 
 	public static ScreenSlidePageFragment newInstance(int position) {
 
@@ -50,9 +51,6 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		Bundle args = new Bundle();
 		args.putInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION, position);
 		webFrag.setArguments(args);
-
-
-
 		return webFrag;
 	}
 
@@ -60,13 +58,19 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		currentPos = getArguments().getInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION);
+		//if(savedInstanceState == null){
+		    currentPos = getArguments().getInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION);
 
-        Log.e("savedInstanceState", currentPos + "<----------------------------------");
+       // }
+
+
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
+		//Log.e("current pos", currentPos + "< is it from savedIns " + savedInstanceState);
 
 		container_ = container;
 
@@ -84,17 +88,25 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		AnimationDrawable gifAnimation = (AnimationDrawable) imageView.getBackground();
 		gifAnimation.start();
 
-//		Log.e("what to load next","set: " + selectedSet + "/ pos:" + currentPos);
-//		Log.e("getCount", ( (ArrayList) ( (HashMap) setsList.get(selectedSet)).get( chapTitlesArr[selectedSet - 1])).size() + "");
-		 selectedSetMap =  ( (HashMap ) setsList.get(selectedSet));
-		 selectedHTML =  ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(currentPos)).getHtml();
-		//Log.e("what to load","set: " + selectedSet + "/ pos:" + currentPos + "/" +selectedHTML + " vs " + ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml() + " size-all: " + selectedSetMap.size());
+//
 
-		if (currentPos < ( (ArrayList) selectedSetMap.get( chapTitlesArr[selectedSet - 1])).size()) {
-			webView.loadUrl(selectedHTML);
-		} else {
-			webView.loadUrl(((HTMLObject) ((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml() );
-		}
+		 selectedSetMap =  ( (HashMap ) setsList.get(selectedSet));
+
+		 mapTitlesArray = (ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1]);
+		Log.e("current pos", currentPos + "< is it from savedIns " + savedInstanceState + "," + selectedSet + ","+
+				mapTitlesArray.size());
+		 if(currentPos >= mapTitlesArray.size()){
+			 currentPos = 0;
+		 }
+		selectedHTML =  ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] ))
+				.get(currentPos)).getHtml();
+
+		Log.e("what to load","set: " + selectedSet + "/ pos:" + currentPos + "/" +selectedHTML +
+				" vs " + ((HTMLObject)((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml()
+				+ " size-all: " + selectedSetMap.size());
+
+		webView.loadUrl(selectedHTML);
+
 		return rootView;
 	}
 
@@ -216,10 +228,12 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		}
 	}
 
-	@Override
+/*	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-	}
+
+		outState.putInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION, currentPos);
+	}*/
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
