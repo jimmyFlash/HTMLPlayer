@@ -29,6 +29,10 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
+        baseline file("lint-baseline.xml") // your choice of filename/path here
+    }
 }
 
 dependencies {
