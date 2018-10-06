@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -61,10 +62,26 @@ public class PagerFragment extends Fragment{
 	private ArrayList list;
 	private ConstraintLayout constrain1;
 	private boolean changed  = false;
+	private static final String KEY_CURRENT_SLIDE_NO = "currentSlideNo";
+	private int currentPos = 0;
 
 
-	public static Fragment newInstance() {
-		return frgIns = new PagerFragment();
+	public static Fragment newInstance(int slideNo) {
+		frgIns = new PagerFragment();
+		if(slideNo > 0){
+			Bundle args = new Bundle();
+			args.putInt(KEY_CURRENT_SLIDE_NO, slideNo);
+			frgIns.setArguments(args);
+		}
+		return frgIns;
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		if(getArguments() != null)currentPos = getArguments().getInt(KEY_CURRENT_SLIDE_NO);
+
 	}
 
 	@Override
@@ -129,7 +146,7 @@ public class PagerFragment extends Fragment{
 
 		mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
 		mViewPager.setAdapter(mPagerAdapter);
-//		mViewPager.setCurrentItem(pagerPos);
+		if(currentPos > 0 )mViewPager.setCurrentItem(currentPos);
 
 
 

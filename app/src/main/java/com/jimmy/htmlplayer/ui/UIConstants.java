@@ -6,7 +6,10 @@ package com.jimmy.htmlplayer.ui;
 public class UIConstants {
 
     public static final String KEY_SECTION_NAME = "sectionname";
+    public static final String KEY_MESSAGE_FILTER_INTENT = "message_filter_intent";
+    public static final String KEY_MESSAGE_CATEGORY_EXTRA = "messageIntentExtra";
     public static final String KEY_SECTION_THUMB = "thumb";
+    public static final String KEY_MESSAGE_SELECTED_EXTRA = "messageSelectedExtra";
     public static String copyFoldNm = "pdf";
 
     public static String KEY_SECTIONS = "Sections";

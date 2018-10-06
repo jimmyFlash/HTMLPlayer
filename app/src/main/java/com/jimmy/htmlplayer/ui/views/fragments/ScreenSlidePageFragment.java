@@ -1,10 +1,12 @@
 package com.jimmy.htmlplayer.ui.views.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +20,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.jimmy.htmlplayer.R;
+import com.jimmy.htmlplayer.businesslogic.services.MessageService;
 import com.jimmy.htmlplayer.datahandlers.pojo.HTMLObject;
 import com.jimmy.htmlplayer.ui.UIConstants;
 import com.jimmy.htmlplayer.ui.util.PDFOpen;
+import com.jimmy.htmlplayer.ui.views.activities.ViewerActivity;
 import com.jimmy.htmlplayer.ui.views.adapters.MyPageChangeListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.jimmy.htmlplayer.ui.UIConfig.chapTitlesArr;
 import static com.jimmy.htmlplayer.ui.UIConfig.isFirstRun;
@@ -43,8 +48,9 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 	private HashMap selectedSetMap;
 	private String selectedHTML;
 	private ArrayList mapTitlesArray;
+    private Intent genricIntent;
 
-	public static ScreenSlidePageFragment newInstance(int position) {
+    public static ScreenSlidePageFragment newInstance(int position) {
 
 		ScreenSlidePageFragment webFrag = new ScreenSlidePageFragment();
 		// Supply val input as an argument.
@@ -61,9 +67,7 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 		//if(savedInstanceState == null){
 		    currentPos = getArguments().getInt(UIConstants.KEY_CURRENT_FRAGMENT_POSITION);
 
-       // }
-
-
+        // }
 	}
 
 	@Override
@@ -175,12 +179,13 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 
 				} else if (extension.equals(".html") || extension.equals(".htm")) {
 
-					if (!TextUtils.isEmpty(url) && selectedSetMap.size() > 1) {
-						if (!url.equals(selectedHTML)) {
-							 Log.d("NONE MATCHING URLS ", url);
+					boolean foundURL = false;
 
+					// quick search in the range of the current selected set
+					if (!TextUtils.isEmpty(url) && selectedSetMap.size() > 1) {
+						if (!url.equals(selectedHTML)) {// prevent reloading of the current html
+							 // search in the current set category
 							for (int i = 0; i < selectedSetMap.size(); i++) {
-								//((HTMLObject) ((ArrayList ) selectedSetMap.get( chapTitlesArr[selectedSet - 1] )).get(0)).getHtml()
 								String htmlSlid = ((HTMLObject) ((ArrayList) selectedSetMap.get(chapTitlesArr[selectedSet - 1])).get(i)).getHtml();
 								if (url.equals(htmlSlid)) {
 
@@ -188,14 +193,49 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 									// "the matching position to update to is: "
 									// + i +"------------------------");
 
+									foundURL = true;
 									MyPageChangeListener.updateView(i);
-
-									break;
-
+									return true;
 								}
 							}
 						}
 					}
+					if(!foundURL){// not found in current set do in depth search on all stored htmls
+
+						catScan : for (int i = 1; i <= setsList.size(); i++) {
+
+							if(selectedSet != i ){// skip current set since quick scan didn't find matches
+
+								HashMap<String, ArrayList<HTMLObject>> currCatHashMapSet = setsList.get(i);
+
+								for (ArrayList<HTMLObject> value : currCatHashMapSet.values()) {
+									for (int j = 0; j < value.size(); j++) {
+
+										if(url.equals( (value.get(j)).getHtml())){
+											foundURL = true;
+
+											try {
+											    Log.e("SSSSSSSSSSS", "START SERVICE");
+												 genricIntent = new Intent(getActivity(), MessageService.class);
+												genricIntent.putExtra(UIConstants.KEY_MESSAGE_CATEGORY_EXTRA, i);
+												genricIntent.putExtra(UIConstants.KEY_MESSAGE_SELECTED_EXTRA, j);
+												getActivity().startService(genricIntent);
+
+											} catch (NullPointerException e) {
+												e.printStackTrace();
+											}
+
+											return true;
+										}
+
+									}
+								}
+							}
+						}
+
+						webView.loadUrl(url);
+					}
+
 				}
 
 				return true;
@@ -204,7 +244,13 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 
 	}
 
-	@Override
+    @Override
+    public void onPause() {
+	    getActivity().stopService(new Intent(getActivity(), MessageService.class));
+        super.onPause();
+    }
+
+    @Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 

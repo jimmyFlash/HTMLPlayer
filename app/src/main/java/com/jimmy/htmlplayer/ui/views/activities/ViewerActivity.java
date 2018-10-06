@@ -1,8 +1,13 @@
 package com.jimmy.htmlplayer.ui.views.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -14,6 +19,7 @@ import com.jimmy.htmlplayer.businesslogic.json.LoadLocalJSON;
 import com.jimmy.htmlplayer.datahandlers.pojo.HTMLObject;
 import com.jimmy.htmlplayer.ui.UIConstants;
 import com.jimmy.htmlplayer.ui.util.CopyPDFDirectory;
+import com.jimmy.htmlplayer.ui.views.adapters.MyPageChangeListener;
 import com.jimmy.htmlplayer.ui.views.fragments.PagerFragment;
 
 import org.json.JSONArray;
@@ -44,6 +50,7 @@ public class ViewerActivity extends AppCompatActivity {
     private JSONObject rawJson;// json object created from loaded json stirng
 
 
+    private BroadcastReceiver mMessageReceiver;
 
     // the main list of html sections with all it's session
     private  List<List<HTMLObject>> htmlGroup;
@@ -71,6 +78,24 @@ public class ViewerActivity extends AppCompatActivity {
 
             // load the json string and parse in AsyncTask
             new LoadJson(UIConstants.jsonFileName).execute();
+            // Our handler for received Intents. This will be called whenever an Intent
+            // with an action named "custom-event-name" is broadcasted.
+            mMessageReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if(intent.getAction().equals(UIConstants.KEY_MESSAGE_FILTER_INTENT)){
+                        // Get extra data included in the Intent
+                        int cat = intent.getIntExtra(UIConstants.KEY_MESSAGE_CATEGORY_EXTRA, 0);
+                        int selectdItm = intent.getIntExtra(UIConstants.KEY_MESSAGE_SELECTED_EXTRA, 0);
+                        Log.e("receiver", "Got message: " + cat + "," + selectdItm);
+
+
+                        setCurrentTabFragment(cat, selectdItm);
+
+                    }
+
+                }
+            };
         }else{
             for (int i = 0 ; i < chapTitlesArr.length ; i++){
                 tabLayout.addTab(tabLayout.newTab().setText(chapTitlesArr[i]), i == (selectedSet -1 ));
@@ -88,20 +113,31 @@ public class ViewerActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        // Unregister since the activity is paused.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(
+                mMessageReceiver);
+
         super.onPause();
     }
 
 
     @Override
     protected void onResume() {
+
+        // Register to receive messages.
+        // We are registering an observer (mMessageReceiver) to receive Intents
+        // with actions named "custom-event-name".
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mMessageReceiver, new IntentFilter(UIConstants.KEY_MESSAGE_FILTER_INTENT));
+
         super.onResume();
     }
 
 
-    private void setInitialFragment() {
+    private void setInitialFragment(int slideNo) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, PagerFragment.newInstance())
+                .replace(R.id.container, PagerFragment.newInstance(slideNo))
 //                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
     }
@@ -230,7 +266,7 @@ public class ViewerActivity extends AppCompatActivity {
 
 
 
-                        setInitialFragment();
+                        setInitialFragment(0);
 
                         bindWidgetsWithAnEvent();
 
@@ -266,6 +302,14 @@ public class ViewerActivity extends AppCompatActivity {
 
         selectedSet = tabPosition + 1;
 
-        setInitialFragment();
+        setInitialFragment(0);
+    }
+
+
+    private void setCurrentTabFragment(int tabPosition, int selectedSlide) {
+
+        tabLayout.getTabAt(tabPosition).select();
+        selectedSet = tabPosition + 1;
+        setInitialFragment(selectedSlide);
     }
 }

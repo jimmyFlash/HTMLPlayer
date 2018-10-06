@@ -227,7 +227,7 @@ public class VideoPlayerFragment extends DialogFragment implements OnCompletionL
 					 vido.start();
 				
 					 bgRun.run();
-				     Log.d("Covered: " , progress + "/" + seekBar.getProgress());
+//				     Log.d("Covered: " , progress + "/" + seekBar.getProgress());
 				    
 				  }
 				});
@@ -364,7 +364,7 @@ public class VideoPlayerFragment extends DialogFragment implements OnCompletionL
          String formatted = String.format("%d:%02d:%2d", hours, minutes, seconds);
      
          
-         Log.d(" payback time", formatted);
+//         Log.d(" payback time", formatted);
          disp.setText(formatted);
          
 
