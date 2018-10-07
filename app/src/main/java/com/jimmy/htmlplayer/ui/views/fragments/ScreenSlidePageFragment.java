@@ -221,21 +221,19 @@ public class ScreenSlidePageFragment extends Fragment implements OnTouchListener
 												genricIntent.putExtra(UIConstants.KEY_MESSAGE_SELECTED_EXTRA, j);
 												getActivity().startService(genricIntent);
 
+                                                return true;
 											} catch (NullPointerException e) {
 												e.printStackTrace();
 											}
-
-											return true;
 										}
 
 									}
 								}
 							}
 						}
-
+						// it's a generic page just load it
 						webView.loadUrl(url);
 					}
-
 				}
 
 				return true;
