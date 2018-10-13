@@ -1,25 +1,38 @@
 package com.jimmy.htmlplayer.ui.views.activities;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.jimmy.htmlplayer.PermissionManager;
 import com.jimmy.htmlplayer.R;
 import com.jimmy.htmlplayer.businesslogic.json.JsonValidator;
 import com.jimmy.htmlplayer.businesslogic.json.LoadLocalJSON;
 import com.jimmy.htmlplayer.datahandlers.pojo.HTMLObject;
 import com.jimmy.htmlplayer.ui.UIConstants;
 import com.jimmy.htmlplayer.ui.util.CopyPDFDirectory;
-import com.jimmy.htmlplayer.ui.views.adapters.MyPageChangeListener;
 import com.jimmy.htmlplayer.ui.views.fragments.PagerFragment;
 
 import org.json.JSONArray;
@@ -63,6 +76,9 @@ public class ViewerActivity extends AppCompatActivity {
     //private HashMap< Integer, HashMap<String, ArrayList<String> > > finalmap;
     private HashMap< Integer, HashMap<String, ArrayList<HTMLObject> > > finalmap;
     private TabLayout tabLayout;
+
+    private static final int  REQUEST_MULTI_PERMISSION = 10;
+    private PermissionManager pm;
 
 
     @Override
@@ -264,14 +280,21 @@ public class ViewerActivity extends AppCompatActivity {
                         Log.d(TAG, "  chapter title: " +  chapTitlesArr[0] );
                         Log.d(TAG, " the slides in chapter: " + ((HTMLObject) ((ArrayList) ( (HashMap ) finalmap.get(selectedSet)).get( chapTitlesArr[0])).get(0)).getHtml());
 
-
-
                         setInitialFragment(0);
 
                         bindWidgetsWithAnEvent();
 
-                        // in a background thread copy pdf from assets folder to folder on users sd card
-                        new CopyPDFDirectory(ViewerActivity.this, "pdf").execute();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isAllPermissionsGranted()) {
+
+                             pm = new PermissionManager.PermissionBuilder(ViewerActivity.this, REQUEST_MULTI_PERMISSION)
+                                        .addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        .build();
+
+                        }else{
+                            // in a background thread copy pdf from assets folder to folder on users sd card
+                            new CopyPDFDirectory(ViewerActivity.this, "pdf").execute();
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -299,17 +322,64 @@ public class ViewerActivity extends AppCompatActivity {
     }
 
     private void setCurrentTabFragment(int tabPosition) {
-
         selectedSet = tabPosition + 1;
-
         setInitialFragment(0);
     }
 
 
     private void setCurrentTabFragment(int tabPosition, int selectedSlide) {
-
         tabLayout.getTabAt(tabPosition).select();
         selectedSet = tabPosition + 1;
         setInitialFragment(selectedSlide);
     }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+
+            case REQUEST_MULTI_PERMISSION:
+                if(pm != null){
+                    boolean allSet = pm.multiplePermissionProcessor(permissions, grantResults);
+                    if(allSet){
+                        new CopyPDFDirectory(ViewerActivity.this, "pdf").execute();
+                        Log.e("PERMISSIOOOON", "ALL GRANTED");
+                    }else{
+                        ArrayList<String> deniedPerm = pm.getDeniedPermissionsList();
+                        Log.e("PERMISSIOOOON", "DENIED " + deniedPerm.size() + ", " + deniedPerm.toString());
+                        // can check if a certain permission you're instrested in exits is denied, if not you proceed or halt
+                    }
+                }
+                 break;
+
+            // permission requested from a fragment inside this activity( fragments onRequestPermissionsResult
+            // is overridden by the hosting activity
+            // hence we forward back the call to the fragments onRequestPermissionsResult handler
+            case PermissionManager.FRAGMENT_DELEGATE_PERMISSIONS:
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                if (fragments != null) {
+                    for (Fragment fragment : fragments) {
+                      // check if your fragment is instance of certain class or implements certain interface and do callbacks
+                        boolean allSet = pm.multiplePermissionProcessor(permissions, grantResults);
+                    }
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private boolean isAllPermissionsGranted() {
+        boolean writeToExternalStore;
+
+        writeToExternalStore = ContextCompat.checkSelfPermission(ViewerActivity.this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        // add more permissions if required and use logic operators in return
+
+        return  writeToExternalStore;
+    }
+
 }
